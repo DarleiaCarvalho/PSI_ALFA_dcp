@@ -1,0 +1,98 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:decorate template="/principal.xhtml">
+        <ui:define name="centro">
+            
+		<h:head>
+			<h:outputStylesheet library="css" name="grid.css"/>
+			<h:outputStylesheet library="css" name="style.css"/>
+		</h:head>
+	
+	<div id="blocoConteudo">
+	<div class="container">
+
+
+		<h:form id="dadosGrupo">
+			<h2>
+					<h:outputText value="Novo Grupo" rendered="#{empty grupoController.grupo.id}"/>
+					<h:outputText value="Editar Grupo" rendered="#{not empty grupoController.grupo.id}"/>
+			</h2>
+		
+			<fieldset>
+				<legend>Dados do Grupo</legend>
+				
+				<h:panelGrid columns="4">
+				
+					<p:outputLabel value="Id:" for="id" 
+					     rendered="#{grupoController.grupo.id != null}"/>
+					<p:inputText id="id" 
+						 value="#{grupoController.grupo.id}"
+						 rendered="#{grupoController.grupo.id != null}"
+						 readonly="true"/>
+						 
+					<p:outputLabel value="Nome do Grupo:" for="nome"/>
+					<p:inputText id="nome" 
+						placeholder="Digite o nome do Grupo"
+						 value="#{grupoController.grupo.nome}" 
+						 required="true" 
+						 requiredMessage="O Nome obrigatorio" />
+						 
+					 <p:growl id="messages" />
+					
+					<f:facet name="footer">
+						<h:commandButton value="Salvar" action="#{grupoController.salvar}">
+							<f:ajax execute="@form" render="@form :tabela" />
+						</h:commandButton>
+					</f:facet>
+					
+				</h:panelGrid>
+			</fieldset>
+		</h:form>
+			
+		<h:form id="tabela">
+			<p:dataTable value="#{grupoController.grupos}" var="grupo"
+				styleClass="dados" rowClasses="impar,par" >
+				
+				<f:facet name="header">
+			        Lista de Grupos
+			    </f:facet>
+			    
+				<p:column>
+					<f:facet name="header"><h:outputText value="Nome" /></f:facet>
+					#{grupo.nome}
+				</p:column>
+			
+				<p:column>
+					<f:facet name="header"><h:outputText value="Remover" /></f:facet>
+					<h:commandLink action="#{grupoController.excluir(grupo)}">
+						<p:graphicImage value="/resources/imagens/botao_excluir.png"/>
+						<f:ajax render="@form" />
+						<f:setPropertyActionListener 
+							target="#{grupoController.grupo}" 
+							value="#{grupo}"/>
+					</h:commandLink>
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header"><h:outputText value="Alterar" /></f:facet>
+					<h:commandLink>
+					<p:graphicImage value="/resources/imagens/botao_editar.png"/>
+						<f:ajax render="@form :dadosGrupo" />
+						<f:setPropertyActionListener 
+							target="#{grupoController.grupo}" 
+							value="#{grupo}"/>
+					</h:commandLink>
+				</p:column>
+				
+			</p:dataTable>
+		</h:form>
+	
+	</div>
+</div>
+
+        </ui:define>
+    </ui:decorate>
+</html>

@@ -1,0 +1,173 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:decorate template="/principal.xhtml">
+        <ui:define name="centro">
+            
+		<h:head>
+			<h:outputStylesheet library="css" name="grid.css"/>
+			<h:outputStylesheet library="css" name="style.css"/>
+		</h:head>
+	
+	<div id="blocoConteudo">
+	<div class="container">
+
+		<h:form id="dadosContato">
+			<h2>
+					<h:outputText value="Novo Contato" rendered="#{empty contatoController.contato.id}"/>
+					<h:outputText value="Editar Contato" rendered="#{not empty contatoController.contato.id}"/>
+			</h2>
+			
+			<fieldset>
+				<legend>Dados do Contato</legend>
+				
+				<h:panelGrid columns="4">
+				
+					<h:outputLabel value="Id:" for="id" 
+					     rendered="#{contatoController.contato.id != null}"/>
+					<h:inputText id="id" 
+						 value="#{contatoController.contato.id}"
+						 rendered="#{contatoController.contato.id != null}"
+						 readonly="true"/>
+						
+					<p:outputLabel value="Usuario:" for="usuario"/>
+					<p:inputText
+							id="usuario"
+							readonly="true"
+							value="#{loginController.usuario.login}" >
+					</p:inputText>	
+						 
+					<h:outputLabel value="Nome:" for="nome"/>
+					<h:inputText id="nome" 
+						 value="#{contatoController.contato.nome}" 
+						 required="true" 
+						 requiredMessage="O nome é obrigatorio" />
+						 
+					<h:outputLabel value="Data Nascimento:" for="data_nascimento"/>
+					<h:inputText id="data_nascimento" 
+						 value="#{contatoController.contato.data_nascimento}" 
+						 required="true" 
+						 requiredMessage="O Data Nascimento é obrigatorio" />
+					
+					<h:outputLabel value="Endereco:" for="endereco"/>
+					<h:inputText id="endereco" 
+						 value="#{contatoController.contato.endereco}" />
+					
+					<h:outputLabel value="CEP:" for="cep"/>
+					<h:inputText id="cep" 
+						 value="#{contatoController.contato.cep}" />
+					
+					<h:outputLabel value="Tel. Fixo:" for="tel_fixo"/>
+					<h:inputText id="tel_fixo" 
+						 value="#{contatoController.contato.tel_fixo}" 
+						 required="true" 
+						 requiredMessage="O Tel. Fixo é obrigatorio" />
+						 
+				 	<h:outputLabel value="Tel. Celular:" for="tel_celular"/>
+					<h:inputText id="tel_celular" 
+						 value="#{contatoController.contato.tel_celular}" />
+						 
+					<h:outputLabel value="Bairro:" for="bairro"/>	 
+					<h:selectOneMenu 
+						 id="bairro" 
+						 value="#{contatoController.contato.bairro}" 
+						 converter="entityConverter" 
+						 required="true" 
+						 requiredMessage="O bairro é obrigatorio" > 
+							<f:selectItem itemLabel="Selecione um bairro" itemValue="" />
+                        	<f:selectItems value="#{contatoController.bairrosSelect}" var="p" itemLabel="#{p.bairro}" itemValue="p.id"/>
+                    </h:selectOneMenu>
+                    
+                    <h:outputLabel value="Grupo:" for="grupo"/>	 
+					<h:selectOneMenu 
+						 id="grupo" 
+						 value="#{contatoController.contato.grupo}" 
+						 converter="entityConverter" 
+						 required="true" 
+						 requiredMessage="O grupo é obrigatorio" > 
+							<f:selectItem itemLabel="Selecione um grupo" itemValue="" />
+                        	<f:selectItems value="#{contatoController.gruposSelect}" var="p" itemLabel="#{p.nome}" itemValue="p.id"/>
+                    </h:selectOneMenu>  
+						 
+					 <h:outputLabel value="Email:" for="email"/>
+					<h:inputText id="email" 
+						 value="#{contatoController.contato.email}" />
+						 
+					<p:growl id="messages" />
+					
+					<f:facet name="footer">
+						<h:commandButton value="Salvar" action="#{contatoController.salvar}">
+							<f:ajax execute="@form" render="@form :tabela" />
+						</h:commandButton>
+					</f:facet>
+					
+				</h:panelGrid>
+			</fieldset>
+		</h:form>
+			
+		<h:form id="tabela">
+			<p:dataTable value="#{contatoController.contatos}" var="contato"
+				styleClass="dados" rowClasses="impar,par" >
+				<f:facet name="header">
+			        Lista de Contatos
+			    </f:facet>
+			    
+				<p:column>
+					<f:facet name="header"><h:outputText value="nome" /></f:facet>
+					#{contato.nome}
+				</p:column>
+				<p:column>
+					<f:facet name="header"><h:outputText value="Dat. Nasc." /></f:facet>
+					#{contato.data_nascimento}
+				</p:column>
+				<p:column>
+					<f:facet name="header"><h:outputText value="Endereco" /></f:facet>
+					#{contato.endereco}
+				</p:column>
+				<p:column>
+					<f:facet name="header"><h:outputText value="CEP" /></f:facet>
+					#{contato.cep}
+				</p:column>
+				<p:column>
+					<f:facet name="header"><h:outputText value="Tel. Fixo" /></f:facet>
+					#{contato.tel_fixo}
+				</p:column>
+				<p:column>
+					<f:facet name="header"><h:outputText value="Tel. Cel." /></f:facet>
+					#{contato.tel_celular}
+				</p:column>
+				<p:column>
+					<f:facet name="header"><h:outputText value="Bairro" /></f:facet>
+					#{contato.bairro.nome}
+				</p:column>
+				<p:column>
+					<f:facet name="header"><h:outputText value="Remover" /></f:facet>
+					<h:commandLink action="#{contatoController.excluir(contato)}">
+						<p:graphicImage value="/resources/imagens/botao_excluir.png"/>
+						<f:ajax render="@form" />
+						<f:setPropertyActionListener 
+							target="#{contatoController.contato}" 
+							value="#{contato}"/>
+					</h:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header"><h:outputText value="Alterar" /></f:facet>
+					<h:commandLink>
+					<p:graphicImage value="/resources/imagens/botao_editar.png"/>
+						<f:ajax render="@form :dadosContato" />
+						<f:setPropertyActionListener 
+							target="#{contatoController.contato}" 
+							value="#{contato}"/>
+					</h:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	
+	</div>
+</div>
+
+        </ui:define>
+    </ui:decorate>
+</html>

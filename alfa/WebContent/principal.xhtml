@@ -1,0 +1,51 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+ 
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>ALPHA - Sistema</title>
+        <style type="text/css">
+            body {background-color: #eeeeee; font-size: 12px}
+        </style> 
+        <style>
+  			#leftPanel {z-index:2 !important; }
+  			#leftPanel div{overflow:visible;}
+ 		</style>
+    </h:head>
+    <h:body>
+        <div align="center">
+            <p:layout style="min-width:1020px;max-width:1020px;min-height:600px" fullPage="true">  
+                <p:layoutUnit position="north" size="105">  
+                   <h:graphicImage library="imagens" name="logo_alpha.png" id="logoCompany"/>
+                </p:layoutUnit>  
+                <br />
+                <br />
+ 
+                <p:layoutUnit position="west" size="220" id="leftPanel">  
+                	<h:form id="menuForm" >
+                    	<p:tieredMenu style="width: 95%">
+                    		<p:menuitem value="Página Principal" icon="ui-icon ui-icon-home" url="/principal.xhtml" />
+                    	<p:separator />
+						        <p:menuitem  value="Usuario" icon="ui-icon ui-icon-person" url="/pag_cadastros/cadastroUsuario.xhtml"  />
+						        <p:menuitem  value="Contatos" icon="ui-icon ui-icon-document" url="/pag_cadastros/cadastroContato.xhtml"  />
+						        <p:menuitem  value="Grupo" icon="ui-icon ui-icon-document" url="/pag_cadastros/cadastroGrupo.xhtml"  />
+						        <p:menuitem value="Bairro" icon="ui-icon ui-icon-document" url="/pag_cadastros/cadastroBairro.xhtml" />
+						        <p:menuitem value="Cidade" icon="ui-icon ui-icon-document" url="/pag_cadastros/cadastroCidade.xhtml" />
+						 <p:separator /> 
+				        <p:separator />
+						    		<p:menuitem value="Logado como: #{loginController.usuario.login}" url="#"/>
+						        	<p:menuitem value="Sair" action="#{loginController.efetuaLogout}" ajax="false" icon="ui-icon ui-icon-power" />
+						</p:tieredMenu>
+					</h:form>
+                </p:layoutUnit> 
+                 
+                <p:layoutUnit position="center">  
+                   <div><ui:insert name="centro"> <h2>Seja Bem Vindo #{loginController.usuario.login}</h2> </ui:insert></div>
+                </p:layoutUnit>  
+            </p:layout>  
+        </div>
+    </h:body>
+</html>
